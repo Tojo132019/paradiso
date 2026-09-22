@@ -64,32 +64,7 @@ function paradiso_async_fontawesome( $html, $handle, $href, $media ) {
 }
 add_filter( 'style_loader_tag', 'paradiso_async_fontawesome', 10, 4 );
 
-/**
- * 5. Preload LCP Hero Banner Image in <head>
- */
-function paradiso_preload_lcp_banner_image() {
-	if ( is_front_page() && function_exists( 'get_field' ) ) {
-		$home_slides = get_field( 'manage_home_page_slider' );
 
-		if ( is_array( $home_slides ) && ! empty( $home_slides ) && ! empty( $home_slides[0]['home_page_banner_image'] ) ) {
-			$banner_img = $home_slides[0]['home_page_banner_image'];
-			$img_url    = '';
-
-			if ( is_array( $banner_img ) ) {
-				$img_url = ! empty( $banner_img['sizes']['large'] ) ? $banner_img['sizes']['large'] : ( $banner_img['url'] ?? '' );
-			} elseif ( is_numeric( $banner_img ) ) {
-				$img_url = wp_get_attachment_image_url( absint( $banner_img ), 'large' );
-			} elseif ( is_string( $banner_img ) ) {
-				$img_url = $banner_img;
-			}
-
-			if ( $img_url ) {
-				echo '<link rel="preload" as="image" href="' . esc_url( $img_url ) . '" fetchpriority="high">' . "\n";
-			}
-		}
-	}
-}
-add_action( 'wp_head', 'paradiso_preload_lcp_banner_image', 1 );
 
 /**
  * 6. Enqueue All JavaScript Files Safely (All Deferred)
